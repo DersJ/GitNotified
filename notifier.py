@@ -10,14 +10,14 @@ except ImportError as e:
 def listenForCommits():
 
 	try:
-		with open('config.json') as json_file:  
+		with open('./config.json') as json_file:  
 			data = json.load(json_file)
 
 			access_token = data["token"]
 			domain = data["domain"]
 			id_list = data["id_list"]
 
-	except FileNotFoundError:
+	except FileNotFoundError as e:
 		print("ERROR: "+str(e))
 		print("Config file not found! Run python setup.py to generate it.")
 
@@ -32,7 +32,6 @@ def listenForCommits():
 	current_commits ={}
 	
 	while(True):
-		
 		for repo in id_list:
 			response = requests.get("{}/api/v4/projects/{}/repository/commits/".format(domain, repo), headers={"Private-Token": access_token})
 			if(response.status_code == 200):
